@@ -20,7 +20,7 @@ init_types = sorted(df['init_type'].unique())
 
 for i, init in enumerate(init_types):
     for j, kernel in enumerate(kernel_nums):
-        plt.subplot(3, 3, i * 3 + j + 1)
+        plt.subplot(4, 4, i * 4 + j + 1)
         plt.title(f'Kernel={kernel}, Init={init}')
 
         # 해당 조건에 맞는 데이터 필터링
@@ -42,11 +42,11 @@ for i, init in enumerate(init_types):
 
         plt.xlabel('Epoch')
         plt.ylabel('Average Loss')
-        plt.legend()
+        plt.legend(framealpha=0.5, loc='upper right')
         plt.grid(True)
 
 plt.tight_layout(rect=[0, 0, 1, 0.95])
-output_image = os.path.join(output_dir, 'adam_training_results.png')
+output_image = os.path.join(output_dir, 'adam_training_results_full.png')
 plt.savefig(output_image)
 plt.close()
 

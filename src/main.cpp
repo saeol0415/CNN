@@ -1,6 +1,5 @@
 #include <iostream>
 #include <memory>
-#include <iomanip>
 
 #include "util.h"
 #include "training.h"
@@ -11,12 +10,12 @@ int main() {
     int num_conv_layers = 2;
     int epochs = 100;
 
-    std::vector<int> norm_types = {0, 1}; // 0: Normalize, 1: Standardize
-    std::vector<double> learning_rates = {0.001, 0.0001};
+    std::vector<int> norm_types = {1}; // 0: Normalize, 1: Standardize
+    std::vector<double> learning_rates = {0.01};
     std::vector<int> kernel_nums = {1, 2, 4, 8}; // Kernel numbers
     std::vector<int> init_types = {0, 1, 2};  // 0: Set all initial param to 0, 1: He, 2: LeCun
     
-    std::ofstream csv_file("C:\\Users\\saeol\\Desktop\\C Projects\\CNN\\results\\adam_training_results.csv");
+    std::ofstream csv_file("C:\\Users\\saeol\\Desktop\\C Projects\\CNN\\results\\adam3_training_results.csv");
     csv_file << "norm_type,learning_rate,kernel_num,init_type,epoch,avg_loss,epoch_time,total_time,converged,convergence_epoch,accuracy\n";
 
     // Calculate total number of hyperparameter combinations
@@ -44,7 +43,7 @@ int main() {
 
                     // Print progress for this combination
                     std::cout << "Progress: " << current_combination << "/" << total_combinations 
-                              << " (" << std::fixed << std::setprecision(2) << progress_percent << "%) "
+                              << " (" << progress_percent << "%) "
                               << "[Norm: " << norm_type << ", LR: " << lr << ", Kernels: " << kernel_num 
                               << ", Init: " << init_type << "]" << std::endl;
 
@@ -54,7 +53,6 @@ int main() {
                     auto rmsprop = std::make_unique<RMSProp>(lr, 0.9);
                     auto adam = std::make_unique<Adam>(lr, 0.9, 0.999);
 
-                    std::string optimizer_name = "ADAM";
                     Model model(28, 28, 10, lr, num_conv_layers, std::move(adam), init_type, kernel_num);
                     model.set_training(true);   // Set training mode for batch normalization
                     TrainingResult results = trainDataset(model, train_data, epochs, 0.01);
@@ -71,7 +69,7 @@ int main() {
                     }
                     double accuracy = static_cast<double>(correct) / test_data.size();
                     for (size_t epoch = 0; epoch < results.epoch_losses.size(); ++epoch) {
-                        csv_file << norm_type << "," << std::fixed << std::setprecision(6) << lr << "," 
+                        csv_file << norm_type << "," << lr << "," 
                                  << kernel_num << "," << init_type << "," << (epoch + 1) << "," 
                                  << results.epoch_losses[epoch] << "," << results.epoch_times[epoch] << "," 
                                  << results.total_time << "," << (results.converged ? "1" : "0") << "," 
