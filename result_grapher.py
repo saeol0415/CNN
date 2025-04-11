@@ -42,7 +42,7 @@ for i, init in enumerate(init_types):
 
         plt.xlabel('Epoch')
         plt.ylabel('Average Loss')
-        plt.legend(framealpha=0.5, loc='upper right')
+        plt.legend()
         plt.grid(True)
 
 plt.tight_layout(rect=[0, 0, 1, 0.95])
